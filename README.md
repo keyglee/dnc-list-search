@@ -26,6 +26,17 @@ head dnc.txt
 # the xxx's are supposed to be numbers but they are omitted
 ```
 
+#### Directory example
+```bash
+ls-al
+-rw-r--r--   1 User  root         722 Jan 31 15:38 README.md
+-rwx------   1 User  root  3057397056 Jan 31 14:23 dnc.txt
+-rwxr-xr-x   1 User  root     3000658 Jan 31 14:56 dnclist
+-rw-r--r--   1 User  root         142 Jan 31 14:33 go.mod
+-rw-r--r--   1 User  root        1390 Jan 31 14:33 go.sum
+-rw-r--r--   1 User  root        3036 Jan 31 15:25 main.go
+```
+
 ### Running
 
 Example
