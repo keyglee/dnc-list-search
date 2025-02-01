@@ -94,6 +94,10 @@ func (c *Client) binarySearchFile(target string) (bool, error) {
 		return false, err
 	}
 
+	if stat.Size() == 0 {
+		return false, nil
+	}
+
 	start, end := int64(0), stat.Size()
 	reader := bufio.NewReader(c.dncList)
 
@@ -103,7 +107,7 @@ func (c *Client) binarySearchFile(target string) (bool, error) {
 		traversals++
 		mid := (start + end) / 2
 
-		_, err := c.dncList.Seek(mid, 0)
+		_, err := c.dncList.Seek(mid, io.SeekStart)
 		if err != nil {
 			c.logger.Debugf("Traversals: %d", traversals)
 			return false, err

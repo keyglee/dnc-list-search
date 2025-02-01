@@ -1,4 +1,4 @@
-module dnclist
+module dnclistsearch
 
 go 1.23
 

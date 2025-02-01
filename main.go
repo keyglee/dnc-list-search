@@ -1,10 +1,10 @@
 package main
 
 import (
-	"dnclist/csv"
-	"dnclist/dnc"
-	"dnclist/logger"
-	"dnclist/output"
+	"dnclistsearch/csv"
+	"dnclistsearch/dnc"
+	"dnclistsearch/logger"
+	"dnclistsearch/output"
 	"flag"
 	"fmt"
 	"os"
@@ -13,7 +13,6 @@ import (
 )
 
 func main() {
-	loadNewCard := flag.String("new", "", "Adds a new card from the text file, requires the file path")
 	speedrun := flag.Bool("speedrun", false, "Runs the program with timer")
 	logLevel := flag.String("log", "error", "Log level, can be error, info, or debug")
 	prettyPrint := flag.Bool("pretty", false, "Pretty print the output")
@@ -34,22 +33,14 @@ func main() {
 	dncListFile, err := os.Open("dnc.txt")
 
 	if err != nil {
-		logger.Error(err)
-		panic(err)
+		logger.Errorf("Error opening dnc list file: %s\nIts likely you're missing the dnc.txt file in your directory\nMake sure to run this in the same directory as dnc.txt", err)
+		return
 	}
 
 	dncClient, err := dnc.NewClient(dncListFile, logger)
 
 	if err != nil {
 		panic(err)
-	}
-
-	if *loadNewCard != "" {
-		err := dncClient.LoadNewList(*loadNewCard)
-		if err != nil {
-			logger.Error(err)
-			panic(err)
-		}
 	}
 
 	if *inputCSV != "" {
@@ -101,7 +92,7 @@ func main() {
 
 			deliminator := output.GetDelimiter(*responseDelimiter)
 
-			if *prettyPrint == false {
+			if !*prettyPrint {
 				response = append(response, fmt.Sprintf("%s%t%s", deliminator, found, deliminator))
 			} else if found {
 				response = append(response, fmt.Sprintf("%s%s Found in the file%s", deliminator, arg, deliminator))
