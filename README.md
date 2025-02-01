@@ -6,7 +6,6 @@ Currently a work in progress as it includes the need to upload files and maintai
 ## instructions
 
 ### Build
-
 ```go build```
 
 in the folder, there needs to be a `dnc.txt` file that contains a dnc list
