@@ -106,6 +106,6 @@ func main() {
 
 	if *speedrun {
 		elapsed := time.Since(startTime)
-		logger.Info("Execution time: ", elapsed)
+		fmt.Println("Execution time: ", elapsed)
 	}
 }
