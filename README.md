@@ -47,7 +47,7 @@ head dnc.txt
 Example
 
 ```bash
-dnclistsearch (201)0277-xxxx (201)0201xxxx 2010208xxxx
+dnclistsearch "(201)0277-xxxx" "(201)0201xxxx" 2010208xxxx
 # (201)0277-xxxx Found in the file
 # (201)0201xxxx Found in the file
 # 2010208xxxx Not Found in the file
