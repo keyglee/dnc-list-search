@@ -26,11 +26,15 @@ jobs:
       - name: Fetch all tags
         run: git fetch --force --tags
 
+      - name: Echo github ref name
+        shell: bash
+        run: echo ${{ env.GITHUB_REF_NAME}}
+
       - name: Run GoReleaser
         uses: goreleaser/goreleaser-action@v2
         with:
           distribution: goreleaser
           version: ${{ env.GITHUB_REF_NAME }}
-          args: release --rm-dist
+          args: release --clean
         env:
           GITHUB_TOKEN: ${{ secrets.PUBLISHER_TOKEN }}
