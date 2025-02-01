@@ -8,10 +8,13 @@ Currently a work in progress as it includes the need to upload files and maintai
 ### Homebrew
 
 With brew installed, you can run the following command to install the binary along with adding `dnclistsearch` to your working path
+
 ```bash
 brew install keyglee/keyglee/dnclistsearch
 ```
+
 or
+
 ```bash
 brew tap keyglee/keyglee
 brew install dnclistsearch
@@ -39,7 +42,6 @@ head dnc.txt
 # the xxx's are supposed to be numbers but they are omitted
 ```
 
-
 ## Usage
 
 Example
@@ -62,6 +64,23 @@ dnclistsearch (201)0277-xxxx (201)0201xxxx 2010208xxxx
 | `-separator` | Response separator                 | "newline"     |
 | `-csv`       | Path to input CSV file             | ""            |
 | `-output`    | Path to output CSV file            | "results.csv" |
+
+### Separators
+
+| key     | value   |
+| ------- | ------- |
+| comma   | ,       |
+| newline | \n      |
+| none    | [empty] |
+
+### Deliminators
+
+| key         | value   |
+| ----------- | ------- |
+| colon       | :       |
+| singlequote | '       |
+| doublequote | "       |
+| none        | [empty] |
 
 ## Usage Examples
 

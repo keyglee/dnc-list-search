@@ -13,17 +13,13 @@ func NewLogger(stage string) *logrus.Logger {
 	logger = logrus.New()
 	logger.SetOutput(os.Stdout)
 
-	if stage == "" {
-		stage = os.Getenv("STAGE")
-	}
-
 	switch stage {
-	case "lab", "dev", "development", "local":
+	case "debug":
 		logger.SetLevel(logrus.DebugLevel)
-	case "prod", "production":
-		logger.SetLevel(logrus.ErrorLevel)
-	default:
+	case "info":
 		logger.SetLevel(logrus.InfoLevel)
+	default:
+		logger.SetLevel(logrus.ErrorLevel)
 	}
 
 	return logger
