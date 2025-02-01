@@ -11,13 +11,22 @@ With brew installed, you can run the following command to install the binary alo
 
 ```bash
 brew install keyglee/keyglee/dnclistsearch
-```
 
-or
+# or
 
-```bash
 brew tap keyglee/keyglee
 brew install dnclistsearch
+```
+
+To get latest updates
+```bash
+brew update
+brew upgrade keyglee/keyglee/dnclistearch
+
+# or
+
+brew update
+brew upgrade dnclistsearch
 ```
 
 ### Manual
