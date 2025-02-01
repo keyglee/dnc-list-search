@@ -30,7 +30,7 @@ head dnc.txt
 ls-al
 -rw-r--r--   1 User  root         722 Jan 31 15:38 README.md
 -rwx------   1 User  root  3057397056 Jan 31 14:23 dnc.txt
--rwxr-xr-x   1 User  root     3000658 Jan 31 14:56 dnclist
+-rwxr-xr-x   1 User  root     3000658 Jan 31 14:56 dnclistsearch
 -rw-r--r--   1 User  root         142 Jan 31 14:33 go.mod
 -rw-r--r--   1 User  root        1390 Jan 31 14:33 go.sum
 -rw-r--r--   1 User  root        3036 Jan 31 15:25 main.go
@@ -40,7 +40,7 @@ ls-al
 
 Example
 ```bash
-./dnclist (201)0277-xxxx (201)0201xxxx 2010208xxxx
+./dnclistsearch (201)0277-xxxx (201)0201xxxx 2010208xxxx
 # (201)0277-xxxx Found in the file
 # (201)0201xxxx Found in the file
 # 2010208*xxxx Not Found in the file
@@ -64,16 +64,16 @@ Example
 
 ```bash
 # Process a single phone number
-./dnclist -pretty 1234567890
+./dnclistsearch -pretty 1234567890
 
 # Process CSV file
-./dnclist -csv input.csv -output results.csv
+./dnclistsearch -csv input.csv -output results.csv
 
 # Add new numbers to DNC list
-./dnclist -new newlist.txt
+./dnclistsearch -new newlist.txt
 
 # Run with debug logging
-./dnclist -log debug -pretty 1234567890
+./dnclistsearch -log debug -pretty 1234567890
 ```
 
 ## Output

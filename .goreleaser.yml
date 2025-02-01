@@ -1,7 +1,7 @@
 version: 2
 
 builds:
-  - binary: dnclist
+  - binary: dnclistsearch
     main: ./main.go
     goos:
       - darwin
@@ -22,8 +22,8 @@ universal_binaries:
   - replace: true
 
 brews:
-  - name: dnc-list-search
-    homepage: https://github.com/keyglee/dnc-list-search
+  - name: dnclistsearch
+    homepage: https://github.com/keyglee/dnclistsearch
     commit_author:
       name: Ryley Lamb
       email: ryleylamb@gmail.com
