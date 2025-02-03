@@ -1,9 +1,13 @@
 package csv
 
 import (
+	"dnclistsearch/logger"
 	"encoding/csv"
 	"fmt"
 	"os"
+	"slices"
+
+	"github.com/sirupsen/logrus"
 )
 
 type PhoneColumns struct {
@@ -17,9 +21,14 @@ type CSVProcessor struct {
 	inputFile   *os.File
 	outputFile  *os.File
 	phoneFields PhoneColumns
+	logger      *logrus.Logger
 }
 
-func NewCSVProcessor(inputPath, outputPath string) (*CSVProcessor, error) {
+func (c *CSVProcessor) GetReader() *csv.Reader {
+	return c.reader
+}
+
+func NewCSVProcessor(inputPath, outputPath string, wantedHeaders []string) (*CSVProcessor, error) {
 	inFile, err := os.Open(inputPath)
 	if err != nil {
 		return nil, fmt.Errorf("failed to open input file: %w", err)
@@ -36,9 +45,10 @@ func NewCSVProcessor(inputPath, outputPath string) (*CSVProcessor, error) {
 		writer:     csv.NewWriter(outFile),
 		inputFile:  inFile,
 		outputFile: outFile,
+		logger:     logger.GetLogger(),
 	}
 
-	if err := processor.initializeHeaders(); err != nil {
+	if err := processor.initializeHeaders(wantedHeaders); err != nil {
 		processor.Close()
 		return nil, err
 	}
@@ -46,7 +56,7 @@ func NewCSVProcessor(inputPath, outputPath string) (*CSVProcessor, error) {
 	return processor, nil
 }
 
-func (p *CSVProcessor) initializeHeaders() error {
+func (p *CSVProcessor) initializeHeaders(wantedHeaders []string) error {
 	headers, err := p.reader.Read()
 	if err != nil {
 		return fmt.Errorf("failed to read headers: %w", err)
@@ -58,8 +68,7 @@ func (p *CSVProcessor) initializeHeaders() error {
 	}
 
 	for i, header := range headers {
-		switch header {
-		case "Primary #", "Phone 1", "Phone 2", "Phone 3":
+		if slices.Contains(wantedHeaders, header) {
 			p.phoneFields.PhoneFields[header] = i
 		}
 	}
@@ -70,34 +79,6 @@ func (p *CSVProcessor) initializeHeaders() error {
 		newHeaders = append(newHeaders, colName+" Result")
 	}
 	return p.writer.Write(newHeaders)
-}
-
-func (p *CSVProcessor) ProcessRows(processor func(string) (bool, error)) error {
-	for {
-		record, err := p.reader.Read()
-		if err != nil {
-			break
-		}
-
-		newRow := record
-		for _, idx := range p.phoneFields.PhoneFields {
-			phoneNum := record[idx]
-			result, err := processor(phoneNum)
-			if err != nil {
-				newRow = append(newRow, "Error")
-				continue
-			}
-			if result {
-				newRow = append(newRow, "Found")
-			} else {
-				newRow = append(newRow, "Not Found")
-			}
-		}
-		if err := p.writer.Write(newRow); err != nil {
-			return err
-		}
-	}
-	return nil
 }
 
 func (p *CSVProcessor) Close() error {

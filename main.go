@@ -43,8 +43,10 @@ func main() {
 		panic(err)
 	}
 
+	wantedHeaders := []string{"Primary #", "Phone 1", "Phone 2", "Phone 3"}
+
 	if *inputCSV != "" {
-		processor, err := csv.NewCSVProcessor(*inputCSV, *outputCSV)
+		processor, err := csv.NewCSVProcessor(*inputCSV, *outputCSV, wantedHeaders)
 		if err != nil {
 			logger.Error(err)
 			panic(err)
