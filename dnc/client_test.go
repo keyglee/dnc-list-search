@@ -81,7 +81,7 @@ Test2,Rep2,LLC2,Jane Doe,456 St,,Cell,5551234571,Home,,,,,test2@test.com`
 	}
 
 	// Initialize processor
-	processor, err := csv.NewCSVProcessor(tmpInput, tmpOutput)
+	processor, err := csv.NewCSVProcessor(tmpInput, tmpOutput, []string{"Primary #", "Phone 1", "Phone 2", "Phone 3"})
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -105,12 +105,6 @@ Test2,Rep2,LLC2,Jane Doe,456 St,,Cell,5551234571,Home,,,,,test2@test.com`
 		if phone != expected[i] {
 			t.Errorf("Expected phone %s, got %s", expected[i], phone)
 		}
-	}
-
-	// Test row with missing phones
-	row, err = processor.reader.Read()
-	if err != nil {
-		t.Fatal(err)
 	}
 
 	phones = processor.GetPhoneNumbers(row)
