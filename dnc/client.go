@@ -56,6 +56,9 @@ func NewClient(dncList *os.File, logger *logrus.Logger) (*Client, error) {
 		dncList, err := os.Open("dnc.txt")
 
 		if err != nil {
+			if err.Error() == "EOF" {
+				return nil, nil
+			}
 			return nil, err
 		}
 

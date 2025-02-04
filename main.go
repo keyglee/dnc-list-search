@@ -43,27 +43,62 @@ func main() {
 		panic(err)
 	}
 
+	wantedHeaders := []string{"Primary #", "Phone 1", "Phone 2", "Phone 3"}
+
 	if *inputCSV != "" {
-		processor, err := csv.NewCSVProcessor(*inputCSV, *outputCSV)
+		processor, err := csv.NewCSVProcessor(*inputCSV, *outputCSV, wantedHeaders)
 		if err != nil {
 			logger.Error(err)
 			panic(err)
 		}
+
 		defer processor.Close()
 
-		err = processor.ProcessRows(func(phone string) (bool, error) {
-			if phone == "" {
-				return false, nil
-			}
-			formatted, err := dncClient.FormatPhoneNumber(phone)
+		for {
+			csvRow, err := processor.GetNextRow()
+
 			if err != nil {
-				return false, err
+				panic(err)
 			}
-			return dncClient.Search(formatted)
-		})
-		if err != nil {
-			logger.Error(err)
-			panic(err)
+
+			if csvRow == nil {
+				break
+			}
+
+			phones := processor.GetPhoneNumbers(csvRow)
+
+			foundList := make([]string, 0)
+
+			for _, phone := range phones {
+
+				formatPhone, err := dncClient.FormatPhoneNumber(phone)
+				if err != nil {
+					foundList = append(foundList, "either no phone or invalid phone")
+				} else {
+					found, err := dncClient.Search(formatPhone)
+
+					if err != nil {
+						foundList = append(foundList, "encountered an error")
+					} else if found {
+						foundList = append(foundList, "found in DNC list")
+					} else {
+						foundList = append(foundList, "not found in DNC list")
+					}
+				}
+			}
+
+			logger.Debugf("Found list length: %v", len(foundList))
+			logger.Debugf("CSV Row: %v", len(csvRow))
+
+			csvRow = append(csvRow, foundList...)
+
+			logger.Debugf("Writing row: %v", csvRow)
+
+			err = processor.WriteRow(csvRow)
+
+			if err != nil {
+				panic(err)
+			}
 		}
 
 	} else {
