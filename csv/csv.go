@@ -83,9 +83,19 @@ func (p *CSVProcessor) initializeHeaders(wantedHeaders []string) error {
 
 	// Write new headers with result columns
 	newHeaders := headers
-	for colName := range p.phoneFields.SearchPhoneFields {
-		newHeaders = append(newHeaders, colName+" Result")
+	keys := make([]int, 0)
+	for _, col := range p.phoneFields.SearchPhoneFields {
+		keys = append(keys, col)
+	}
+	slices.Sort(keys)
 
+	for _, col := range keys {
+		for colName, index := range p.phoneFields.SearchPhoneFields {
+			if index == col {
+				newHeaders = append(newHeaders, colName+" Result")
+				break
+			}
+		}
 	}
 
 	p.phoneFields.WriteHeaders = newHeaders
